@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from gestion_tareas.models import usuario,tarea
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from dateutil.parser import parse
 # Create your views here.
 def login(request):
     if request.method=='POST':
@@ -36,3 +37,15 @@ def dashboard(request):
     return render(request,'gestion_tareas/dashboard.html',{
         'objTarea':lista_tareas,
     })
+def crear_tarea(request):
+    if request.method =='POST':
+        descripcion = request.POST.get('descripcion')
+        fecha_creacion=request.POST.get('fecha_creacion')
+        fecha_creacion=parse(fecha_creacion)
+        fecha_entrega=request.POST.get('fecha_entrega')
+        fecha_entrega=parse(fecha_entrega)
+        usuario_responsable=request.POST.get('usuario_responsable')
+        tarea(descripcion=descripcion,fecha_creacion=fecha_creacion,fecha_entrega=fecha_entrega,usuario_responsable=usuario_responsable,estado_tarea='').save()
+        return HttpResponseRedirect(reverse('gestion_tareas:dashboard'))
+    return render(request,'gestion_tareas/crear_tarea.html')
+         
