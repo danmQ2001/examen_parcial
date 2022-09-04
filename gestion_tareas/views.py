@@ -17,11 +17,22 @@ def login(request):
                 usuario_registrado=1
        
         if usuario_registrado==1:
-            return HttpResponseRedirect(reverse('gestion_tareas:dashboard'))
+            return HttpResponseRedirect(reverse('gestion_tareas:dashboard'),{
+                'usuario_ingresado': nombreUsuario,
+            })
         else:
             return render(request,'gestion_tareas/login.html',{
                 'mensaje':'Los datos ingresados no son correcto o no están registrados',
             })            
     return render(request,'gestion_tareas/login.html')
 def dashboard(request):
-    return render(request,'gestion_tareas/dashboard.html')
+    tareas_totales = tarea.objects.all()
+    #Filtrar tareas del usuario
+    lista_tareas = []
+    tareas_totales = tarea.objects.filter(usuario_responsable='dany')
+    for homework in tareas_totales:
+        lista_tareas.append(homework)
+    #ciclo de filtración finalizado
+    return render(request,'gestion_tareas/dashboard.html',{
+        'objTarea':lista_tareas,
+    })
