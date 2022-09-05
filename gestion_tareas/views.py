@@ -54,10 +54,8 @@ def editar_tarea(request,ind):
     EditarTarea=tarea.objects.get(id=ind)
     if request.method=='POST':
         EditarTarea.descripcion = request.POST.get('descripcion')
-        #fecha_creacion=request.POST.get('fecha_creacion')
-        #fecha_creacion=parse(fecha_creacion)
-        #fecha_entrega=request.POST.get('fecha_entrega')
-        #fecha_entrega=parse(fecha_entrega)
+        EditarTarea.fecha_creacion=request.POST.get('fecha_creacion')
+        EditarTarea.fecha_entrega=request.POST.get('fecha_entrega')
         EditarTarea.usuario_responsable=request.POST.get('usuario_responsable')
         EditarTarea.save()
         return HttpResponseRedirect(reverse('gestion_tareas:dashboard'))
