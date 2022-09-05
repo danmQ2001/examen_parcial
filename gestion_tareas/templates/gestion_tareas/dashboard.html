@@ -22,11 +22,12 @@
         <table class="table">
             <thead>
                 <th>Id</th>
-                <th>descripcion_tarea</th>
-                <th>fecha_incio</th>
-                <th>fecha_entrega</th>
-                <th>usuario_responsable</th>
-                <th>estado_tarea</th>
+                <th>descripcion tarea</th>
+                <th>fecha incio</th>
+                <th>fecha entrega</th>
+                <th>usuario responsable</th>
+                <th>estado tarea</th>
+                <th>editar</th>
             </thead>
             <tbody>
                 {% for tarea in objTarea %}
@@ -36,8 +37,8 @@
                     <td>{{tarea.fecha_creacion}}</td>
                     <td>{{tarea.fecha_entrega}}</td>
                     <td>{{tarea.usuario_responsable}}</td>
-                    <td>{{tarea.estado_tarea}}</td>
-
+                    <td style="color:green ;">PROGRESO</td>
+                    <td><a class="btn btn-warning" href="{% url 'gestion_tareas:editar_tarea' tarea.id %}">E</a></td>
                 </tr>
                 {%endfor%}
             </tbody>
