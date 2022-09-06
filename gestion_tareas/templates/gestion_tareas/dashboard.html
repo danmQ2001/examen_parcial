@@ -37,7 +37,15 @@
                     <td>{{tarea.fecha_creacion}}</td>
                     <td>{{tarea.fecha_entrega}}</td>
                     <td>{{tarea.usuario_responsable}}</td>
-                    <td style="color:green ;">PROGRESO</td>
+                    {% if tarea.estado_tarea == '1' %}
+                    <td style="background-color:green;">PROGRESO</td>
+                    {% endif %}
+                    {% if tarea.estado_tarea == '2' %}
+                    <td style="background-color:yellow ;">FINALIZANDO</td>
+                    {% endif %}
+                    {% if tarea.estado_tarea == '4' %}
+                    <td style="background-color:red ;">PENDIENTE</td>
+                    {% endif %}
                     <td><a class="btn btn-warning" href="{% url 'gestion_tareas:editar_tarea' tarea.id %}">E</a></td>
                 </tr>
                 {%endfor%}

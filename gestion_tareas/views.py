@@ -33,8 +33,18 @@ def dashboard(request,id_user):
     user_responsable=usuario.objects.get(id=id_user)
     tareas_totales = tarea.objects.filter(usuario_responsable= user_responsable.nombre)
     for homework in tareas_totales:   
-        lista_tareas.append(homework)
+    # Calcular cantidad de días para realizar la tarea
+        fecha_f=datetime.strptime(homework.fecha_entrega, "%Y-%m-%d")
+        fecha_i=datetime.today()
+        remaining_days = (fecha_f - fecha_i).days
+        if remaining_days>2:
+            homework.estado_tarea='1'
+        elif remaining_days<2 and remaining_days>0:
+            homework.estado_tarea='2'
+        else: 
+            homework.estado_tarea='4'
     #ciclo de filtración finalizado
+        lista_tareas.append(homework)
     return render(request,'gestion_tareas/dashboard.html',{
         'objTarea':lista_tareas,
         'user':id_user,
@@ -47,7 +57,7 @@ def crear_tarea(request,mantener_id):
         fecha_entrega=request.POST.get('fecha_entrega')
         fecha_entrega=parse(fecha_entrega)
         usuario_responsable=request.POST.get('usuario_responsable')
-        tarea(descripcion=descripcion,fecha_creacion=fecha_creacion,fecha_entrega=fecha_entrega,usuario_responsable=usuario_responsable,estado_tarea='').save()
+        tarea(descripcion=descripcion,fecha_creacion=fecha_creacion,fecha_entrega=fecha_entrega,usuario_responsable=usuario_responsable,estado_tarea='1').save()
         return HttpResponseRedirect(reverse('gestion_tareas:dashboard',kwargs={'id_user' : mantener_id}))
     return render(request,'gestion_tareas/crear_tarea.html',{
         'id_persona':mantener_id,
