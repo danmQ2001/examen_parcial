@@ -11,7 +11,7 @@
     <body>
         <div class="container col-md-8">
             <h3>Crear tarea</h3>
-            <form method="post" action="{% url 'gestion_tareas:crear_tarea' %}">
+            <form method="post" action="{% url 'gestion_tareas:crear_tarea' id_persona  %}">
             {% csrf_token %}
                 <div class="form-group col-md-3">
                     <label>Descripcion</label>
@@ -33,7 +33,7 @@
                 <br>
                 <div class="col-md-3">
                     <button type="submit" class="btn btn-success">Crear</button>
-                    <a class="btn btn-info" href="{% url 'gestion_tareas:dashboard'%}">Salir</a>
+                    <a class="btn btn-info" href="{% url 'gestion_tareas:dashboard' id_persona %}">Salir</a>
                 </div> 
             </form>
         </div>
