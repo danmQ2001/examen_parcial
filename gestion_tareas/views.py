@@ -36,10 +36,10 @@ def dashboard(request,id_user):
     # Calcular cantidad de días para realizar la tarea
         fecha_f=datetime.strptime(homework.fecha_entrega, "%Y-%m-%d")
         fecha_i=datetime.today()
-        remaining_days = (fecha_f - fecha_i).days
+        remaining_days = (fecha_f - fecha_i).days +1
         if remaining_days>2:
             homework.estado_tarea='1'
-        elif remaining_days<2 and remaining_days>0:
+        elif remaining_days<2 and remaining_days>=0:
             homework.estado_tarea='2'
         else: 
             homework.estado_tarea='4'

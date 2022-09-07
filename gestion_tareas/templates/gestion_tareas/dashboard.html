@@ -28,15 +28,17 @@
                 <th>usuario responsable</th>
                 <th>estado tarea</th>
                 <th>editar</th>
+                <th>finalizar</th>
+                <th>Eliminar</th>
             </thead>
             <tbody>
                 {% for tarea in objTarea %}
                 <tr>
-                    <td>{{tarea.id}}</td>
-                    <td>{{tarea.descripcion}}</td>
-                    <td>{{tarea.fecha_creacion}}</td>
-                    <td>{{tarea.fecha_entrega}}</td>
-                    <td>{{tarea.usuario_responsable}}</td>
+                    <td class="form-group">{{tarea.id}}</td>
+                    <td class="form-group">{{tarea.descripcion}}</td>
+                    <td class="form-group">{{tarea.fecha_creacion}}</td>
+                    <td class="form-group">{{tarea.fecha_entrega}}</td>
+                    <td class="form-group">{{tarea.usuario_responsable}}</td>
                     {% if tarea.estado_tarea == '1' %}
                     <td style="background-color:green;">PROGRESO</td>
                     {% endif %}
@@ -46,7 +48,9 @@
                     {% if tarea.estado_tarea == '4' %}
                     <td style="background-color:red ;">PENDIENTE</td>
                     {% endif %}
-                    <td><a class="btn btn-warning" href="{% url 'gestion_tareas:editar_tarea' tarea.id %}">E</a></td>
+                    <td class="form-group"><a class="btn btn-warning" href="{% url 'gestion_tareas:editar_tarea' tarea.id %}">E</a></td>
+                    <td class="form-group"><a class="btn btn-info" href="{% url 'gestion_tareas:dashboard' user %}">F</a></td>
+                    <td class="form-group"><a type="reset" class="btn btn-danger" href="{% url 'gestion_tareas:dashboard' user %}">D</a></td>
                 </tr>
                 {%endfor%}
             </tbody>
