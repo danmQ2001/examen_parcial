@@ -10,6 +10,7 @@ def login(request):
         nombreUsuario = request.POST.get('nombreUsuario')
         passwordUsuario = request.POST.get('passwordUsuario')
         #validando usuarios
+        parametro_o=0
         usuario_registrado=0
         usuarios_totales= usuario.objects.all()
 
@@ -19,38 +20,46 @@ def login(request):
                 id_person=persona.id
        
         if usuario_registrado==1:
-            return HttpResponseRedirect(reverse('gestion_tareas:dashboard', kwargs={'id_user' : id_person})
+            return HttpResponseRedirect(reverse('gestion_tareas:dashboard', kwargs={'id_user' : id_person , 'tarea_id_finalizar' : parametro_o })
             )
         else:
             return render(request,'gestion_tareas/login.html',{
                 'mensaje':'Los datos ingresados no son correcto o no están registrados',
             })            
     return render(request,'gestion_tareas/login.html')
-def dashboard(request,id_user):
+def dashboard(request,id_user,tarea_id_finalizar):
     tareas_totales = tarea.objects.all()
     #Filtrar tareas del usuario
     lista_tareas = []
     user_responsable=usuario.objects.get(id=id_user)
     tareas_totales = tarea.objects.filter(usuario_responsable= user_responsable.nombre)
-    for homework in tareas_totales:   
+    if tarea_id_finalizar != '0' and tarea_id_finalizar != 0:
+        finalizar_tarea=tarea.objects.get(id=tarea_id_finalizar)
+    for homework in tareas_totales: 
+        if tarea_id_finalizar != '0'and tarea_id_finalizar != 0 :
+            if homework.id==finalizar_tarea.id:
+                homework.estado_tarea='3'
+                homework.save()
     # Calcular cantidad de días para realizar la tarea
-        fecha_f=datetime.strptime(homework.fecha_entrega, "%Y-%m-%d")
+        fecha_f=datetime.strptime(str(homework.fecha_entrega), "%Y-%m-%d")
         fecha_i=datetime.today()
-        remaining_days = (fecha_f - fecha_i).days +1
-        if remaining_days>2:
+        remaining_days = (fecha_f - fecha_i).days 
+        if remaining_days>2 and homework.estado_tarea !='3':
             homework.estado_tarea='1'
-        elif remaining_days<2 and remaining_days>=0:
+        elif remaining_days<2 and remaining_days>=0 and homework.estado_tarea !='3':
             homework.estado_tarea='2'
-        else: 
+        elif homework.estado_tarea !='3':
             homework.estado_tarea='4'
     #ciclo de filtración finalizado
         lista_tareas.append(homework)
+        tarea_id_finalizar=0
     return render(request,'gestion_tareas/dashboard.html',{
         'objTarea':lista_tareas,
         'user':id_user,
     })
 def crear_tarea(request,mantener_id):
     if request.method =='POST':
+        mantener_parametro='0'
         descripcion = request.POST.get('descripcion')
         fecha_creacion=request.POST.get('fecha_creacion')
         fecha_creacion=parse(fecha_creacion)
@@ -58,7 +67,7 @@ def crear_tarea(request,mantener_id):
         fecha_entrega=parse(fecha_entrega)
         usuario_responsable=request.POST.get('usuario_responsable')
         tarea(descripcion=descripcion,fecha_creacion=fecha_creacion,fecha_entrega=fecha_entrega,usuario_responsable=usuario_responsable,estado_tarea='1').save()
-        return HttpResponseRedirect(reverse('gestion_tareas:dashboard',kwargs={'id_user' : mantener_id}))
+        return HttpResponseRedirect(reverse('gestion_tareas:dashboard',kwargs={'id_user' : mantener_id, 'tarea_id_finalizar' : mantener_parametro}))
     return render(request,'gestion_tareas/crear_tarea.html',{
         'id_persona':mantener_id,
     })
