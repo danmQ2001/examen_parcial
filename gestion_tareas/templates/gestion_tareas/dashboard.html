@@ -40,16 +40,16 @@
                     <td class="form-group">{{tarea.fecha_entrega}}</td>
                     <td class="form-group">{{tarea.usuario_responsable}}</td>
                     {% if tarea.estado_tarea == '1' %}
-                    <td id="btn" style="background-color:green;">PROGRESO</td>
+                    <td  style="background-color:green;">PROGRESO</td>
                     {% endif %}
                     {% if tarea.estado_tarea == '2' %}
-                    <td id="btn" style="background-color:yellow ;">FINALIZANDO</td>
+                    <td  style="background-color:yellow ;">FINALIZANDO</td>
                     {% endif %}
                     {% if tarea.estado_tarea == '3' %}
-                    <td id="btn" style="background-color:#40CFFF ;">FINALIZADO</td>
+                    <td  style="background-color:#40CFFF ;">FINALIZADO</td>
                     {% endif %}
                     {% if tarea.estado_tarea == '4' %}
-                    <td id="btn" style="background-color:red ;">PENDIENTE</td>
+                    <td  style="background-color:red ;">PENDIENTE</td>
                     {% endif %}
                     <td class="form-group"><a class="btn btn-warning" href="{% url 'gestion_tareas:editar_tarea' tarea.id  %}">E</a></td>
                     <td id="btn_finalizar" class="form-group"><a class="btn btn-info"  href="{% url 'gestion_tareas:dashboard' user tarea.id %}">F</a></td>
