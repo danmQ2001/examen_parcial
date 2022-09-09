@@ -38,6 +38,7 @@ def dashboard(request,id_user,tarea_id_finalizar,tarea_id_eliminar):
     if tarea_id_eliminar != '0' and tarea_id_eliminar != 0:
         eliminar_tarea=tarea.objects.get(id=int(tarea_id_eliminar))
     for homework in tareas_totales: 
+        # estados de finalizado y eliminado
         if tarea_id_finalizar != '0' and tarea_id_finalizar != 0 :
             if homework.id==finalizar_tarea.id:
                 homework.estado_tarea='3'
@@ -51,8 +52,8 @@ def dashboard(request,id_user,tarea_id_finalizar,tarea_id_eliminar):
         fecha_f=homework.fecha_entrega
         fecha_i=date.today()
 
-
         remaining_days = (fecha_f - fecha_i).days
+        # caso en que no se haya eliminado o finalizado la tarea
         if homework.estado_tarea !='3' and homework.estado_tarea !='5':
             if remaining_days>2 :
                 homework.estado_tarea='1'
@@ -97,3 +98,20 @@ def editar_tarea(request,ind):
         'tarea_info':EditarTarea,
         'id_username':id_persona,
     })    
+def mostrar_info(request,ind):
+        tarea_revisar=tarea.objects.get(id=ind)
+        datos_persona =usuario.objects.get(nombre=tarea_revisar.usuario_responsable)
+        fecha_f=tarea_revisar.fecha_entrega
+        fecha_i=date.today()
+        dias_restantes=(fecha_f - fecha_i).days
+        if dias_restantes>0:
+            mensaje = 'Te quedan '+ str(dias_restantes)+ ' restantes'
+        else:
+            mensaje='esta tarea ya finalizo su tiempo de entrega'
+
+
+        return render(request,'gestion_tareas/mostrar_info.html',{
+        'mensaje':mensaje,
+        'datos_persona':datos_persona,
+        'tarea_revisar':tarea_revisar,
+    })      
